@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # Servicio de Base de Datos
+  db:
+    image: mongo:latest
+    container_name: contenedor_mongo_videojuegos
+    restart: always
+    ports:
+      - "27017:27017" # Permite conectar Compass desde fuera
+    environment:
+      # Credenciales iniciales para la BD
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - mongo_data:/data/db # Persistencia de datos
+    networks:
+      - red-videojuegos
+
+  # Servicio de la API
+  api:
+    build: . # Construye usando el Dockerfile de la carpeta actual
+    container_name: contenedor_api_videojuegos
+    restart: always
+    ports:
+      - "3000:3000" # Acceso desde http://localhost:3000
+    environment:
+      - PORT=${PORT}
+      - MONGO_URI=${MONGO_URI}
+    depends_on:
+      - db # Espera a que la base de datos inicie
+    networks:
+      - red-videojuegos
+
+networks:
+  red-videojuegos:
+    driver: bridge
+
+volumes:
+  mongo_data:
