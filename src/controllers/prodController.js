@@ -9,3 +9,15 @@ exports.crearProducto = async (req, res) => {
         res.status(400).json(req.body);
     }
 }
+
+exports.obtenerProductos = async (req, res) =>{
+    try{
+        const productos = await Producto.find();
+        res.status(200).json(productos);
+    }catch (error){
+        res.status(500).json({
+            mensaje: "Error al obtener los productos",
+            error: error.message
+        });
+    }
+}
