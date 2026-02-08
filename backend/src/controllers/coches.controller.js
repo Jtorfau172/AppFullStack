@@ -1,40 +1,58 @@
-// controllers/coches.controller.js
-const Coche = require("../models/Coche");
+const Coche = require('../models/Coche');
 
+// Crear coche
 exports.createCoche = async (req, res) => {
   try {
-    if (req.body.precio <= 0) {
-      return res.status(400).json({ error: "El precio debe ser mayor que 0" });
-    }
+    const { marca, modelo, precio, stock, año, concesionario_id } = req.body;
 
-    const coche = new Coche(req.body);
+    if (precio <= 0) return res.status(400).json({ mensaje: 'El precio debe ser mayor que 0' });
+
+    const coche = new Coche({ marca, modelo, precio, stock, año, concesionario_id });
     await coche.save();
 
     res.status(201).json(coche);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };
 
+// Actualizar coche
 exports.updateCoche = async (req, res) => {
   try {
-    const coche = await Coche.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-
+    const { id } = req.params;
+    const coche = await Coche.findByIdAndUpdate(id, req.body, { new: true });
+    if (!coche) return res.status(404).json({ mensaje: 'Coche no encontrado' });
     res.json(coche);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };
 
+// Eliminar coche
 exports.deleteCoche = async (req, res) => {
   try {
-    await Coche.findByIdAndDelete(req.params.id);
-    res.json({ message: "Coche eliminado" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    const { id } = req.params;
+    const coche = await Coche.findByIdAndDelete(id);
+    if (!coche) return res.status(404).json({ mensaje: 'Coche no encontrado' });
+    res.json({ mensaje: 'Coche eliminado' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Buscar coches con filtros
+exports.searchCoches = async (req, res) => {
+  try {
+    const { marca, precio_max, disponibilidad } = req.query;
+
+    let query = {};
+    if (marca) query.marca = marca;
+    if (precio_max) query.precio = { $lte: Number(precio_max) };
+    if (disponibilidad === 'true') query.stock = { $gt: 0 };
+
+    const coches = await Coche.find(query);
+    res.json(coches);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };

@@ -1,11 +1,8 @@
-exports.searchCoches = async (req, res) => {
-  const { precio_max, marca, disponibilidad } = req.query;
-  const filtro = {};
+const express = require('express');
+const router = express.Router();
+const ventasController = require('../controllers/ventas.controller');
 
-  if (precio_max) filtro.precio = { $lte: precio_max };
-  if (marca) filtro.marca = marca;
-  if (disponibilidad === "true") filtro.stock = { $gt: 0 };
+router.post('/', ventasController.createVenta);
+router.get('/historial', ventasController.getHistorial);
 
-  const coches = await Coche.find(filtro);
-  res.json(coches);
-};
+module.exports = router;

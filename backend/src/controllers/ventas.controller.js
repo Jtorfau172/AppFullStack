@@ -1,39 +1,42 @@
-// controllers/ventas.controller.js
-const Venta = require("../models/Venta");
-const Coche = require("../models/Coche");
+const Venta = require('../models/Venta');
+const Coche = require('../models/Coche');
+const Cliente = require('../models/Cliente');
 
+// Registrar venta
 exports.createVenta = async (req, res) => {
   try {
-    const { coche_id, cliente_id, metodo_pago } = req.body;
+    const { cliente_id, coche_id, metodo_pago } = req.body;
 
     const coche = await Coche.findById(coche_id);
+    if (!coche) return res.status(404).json({ mensaje: 'Coche no encontrado' });
+    if (coche.stock <= 0) return res.status(400).json({ mensaje: 'Coche sin stock' });
 
-    if (!coche || coche.stock <= 0) {
-      return res.status(400).json({ error: "No hay stock disponible" });
-    }
-
+    // Restar stock
     coche.stock -= 1;
     await coche.save();
 
     const venta = new Venta({
-      coche_id,
       cliente_id,
-      metodo_pago,
-      precio_final: coche.precio
+      coche_id,
+      precio_final: coche.precio,
+      metodo_pago
     });
 
     await venta.save();
-
     res.status(201).json(venta);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };
 
-exports.historialVentas = async (req, res) => {
-  const ventas = await Venta.find()
-    .populate("cliente_id", "nombre")
-    .populate("coche_id", "modelo");
-
-  res.json(ventas);
+// Historial de ventas
+exports.getHistorial = async (req, res) => {
+  try {
+    const ventas = await Venta.find()
+      .populate('cliente_id', 'nombre')
+      .populate('coche_id', 'modelo');
+    res.json(ventas);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
