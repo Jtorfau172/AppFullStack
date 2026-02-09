@@ -19,7 +19,7 @@ services:
 
   # Servicio de la API
   api:
-    build: . # Construye usando el Dockerfile de la carpeta actual
+    build: ./backend # Construye usando el Dockerfile de la carpeta backend
     container_name: contenedor_api_videojuegos
     restart: always
     ports:

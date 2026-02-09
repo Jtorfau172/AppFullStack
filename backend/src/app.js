@@ -16,6 +16,8 @@ app.use(express.json());
 
 // Rutas reales que sí existen
 app.use('/api/coches', require('./routes/coches.routes'));
+app.use('/api/clientes', require('./routes/clientes.routes'));
+app.use('/api/concesionarios', require('./routes/concesionarios.routes'));
 app.use('/api/ventas', require('./routes/ventas.routes'));
 
 // Puerto

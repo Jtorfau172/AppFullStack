@@ -7,13 +7,15 @@ exports.createVenta = async (req, res) => {
   try {
     const { cliente_id, coche_id, metodo_pago } = req.body;
 
+    const cliente = await Cliente.findById(cliente_id);
+    if (!cliente) return res.status(404).json({ mensaje: 'Cliente no encontrado' });
+
     const coche = await Coche.findById(coche_id);
     if (!coche) return res.status(404).json({ mensaje: 'Coche no encontrado' });
     if (coche.stock <= 0) return res.status(400).json({ mensaje: 'Coche sin stock' });
 
-    // Restar stock
+    // Restar stock y guardar venta
     coche.stock -= 1;
-    await coche.save();
 
     const venta = new Venta({
       cliente_id,
@@ -23,7 +25,39 @@ exports.createVenta = async (req, res) => {
     });
 
     await venta.save();
+    await coche.save();
     res.status(201).json(venta);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Obtener venta por ID
+exports.getVentaById = async (req, res) => {
+  try {
+    const venta = await Venta.findById(req.params.id)
+      .populate('cliente_id', 'nombre')
+      .populate('coche_id', 'modelo');
+    if (!venta) return res.status(404).json({ mensaje: 'Venta no encontrada' });
+    res.json(venta);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Eliminar venta (revierte stock)
+exports.deleteVenta = async (req, res) => {
+  try {
+    const venta = await Venta.findByIdAndDelete(req.params.id);
+    if (!venta) return res.status(404).json({ mensaje: 'Venta no encontrada' });
+
+    const coche = await Coche.findById(venta.coche_id);
+    if (coche) {
+      coche.stock += 1;
+      await coche.save();
+    }
+
+    res.json({ mensaje: 'Venta eliminada y stock revertido' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
