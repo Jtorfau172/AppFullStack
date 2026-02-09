@@ -1,0 +1,21 @@
+{
+  "name": "appfullstack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jtorfau172/AppFullStack.git"
+  },
+  "keywords": [],
+  "author": "Anibal <a88anibal@gmail.com>",
+  "license": "MIT",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Jtorfau172/AppFullStack/issues"
+  },
+  "homepage": "https://github.com/Jtorfau172/AppFullStack#readme"
+}

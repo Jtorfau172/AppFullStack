@@ -1,6 +1,7 @@
 // backend/src/app.js
 
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 const express = require('express');
 const conectarDB = require('./config/db'); // tu función de conexión a MongoDB
 const cors = require('cors');
@@ -16,6 +17,8 @@ app.use(express.json());
 
 // Rutas reales que sí existen
 app.use('/api/coches', require('./routes/coches.routes'));
+app.use('/api/clientes', require('./routes/clientes.routes'));
+app.use('/api/concesionarios', require('./routes/concesionarios.routes'));
 app.use('/api/ventas', require('./routes/ventas.routes'));
 
 // Puerto
