@@ -1,4 +1,5 @@
 const Coche = require('../models/Coche');
+const Concesionario = require('../models/Concesionario');
 const Venta = require('../models/Venta');
 
 // Obtener todos los coches
@@ -29,7 +30,7 @@ exports.createCoche = async (req, res) => {
 
     if (precio <= 0) return res.status(400).json({ mensaje: 'El precio debe ser mayor que 0' });
 
-    const coche = new Coche({ marca, modelo, precio, stock, año, concesionario_id });
+    const coche = new Coche({ marca, modelo, precio, stock, año, concesionario_id});
     await coche.save();
 
     res.status(201).json(coche);
