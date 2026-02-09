@@ -1,6 +1,7 @@
 // backend/src/app.js
 
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 const express = require('express');
 const conectarDB = require('./config/db'); // tu función de conexión a MongoDB
 const cors = require('cors');
