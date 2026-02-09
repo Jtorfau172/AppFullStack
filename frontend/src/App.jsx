@@ -5,6 +5,7 @@ import CochesForm from "./components/CochesForm";
 import Buscador from "./components/Buscador";
 import CochesList from "./components/CochesList";
 import RegistroVenta from "./components/RegistroVenta";
+import HistorialVentas from "./components/HistorialVentas";
 
 function App() {
   const [filtro, setFiltro] = useState({});
@@ -21,6 +22,7 @@ function App() {
       <Buscador setFiltro={setFiltro} />
       <CochesList filtro={filtro} key={"list-" + key} />
       <RegistroVenta key={"venta-" + key} />
+      <HistorialVentas key={"historial-" + key} />
     </div>
   );
 }
