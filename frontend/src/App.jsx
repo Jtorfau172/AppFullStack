@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import ConcesionariosForm from "./components/ConcesionariosForm";
 import ClientesForm from "./components/ClientesForm";
 import CochesForm from "./components/CochesForm";
 import Buscador from "./components/Buscador";
@@ -15,7 +14,6 @@ function App() {
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Panel del Concesionario</h1>
-      <ConcesionariosForm onCreado={refrescar} />
       <ClientesForm onCreado={refrescar} />
       <CochesForm key={"coches-" + key} />
       <Buscador setFiltro={setFiltro} />
