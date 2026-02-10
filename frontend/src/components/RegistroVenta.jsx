@@ -44,9 +44,9 @@ export default function RegistroVenta() {
       </select>
       <select value={form.metodo_pago} onChange={e => setForm({...form, metodo_pago:e.target.value})} className="border p-1 m-1">
         <option value="">Método de pago</option>
-        <option value="efectivo">Efectivo</option>
-        <option value="tarjeta">Tarjeta</option>
-        <option value="financiacion">Financiación</option>
+        <option value="efectivo">efectivo</option>
+        <option value="tarjeta">tarjeta</option>
+        <option value="financiacion">financiacion</option>
       </select>
       <button type="submit" className="bg-blue-500 text-white px-2 py-1 rounded">Registrar</button>
     </form>
