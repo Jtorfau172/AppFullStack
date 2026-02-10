@@ -8,8 +8,27 @@ const cors = require('cors');
 
 const app = express();
 
+const Concesionario = require('./models/Concesionario');
+
 // Conectar a la base de datos
-conectarDB();
+conectarDB().then(async () => {
+    console.log("DB Conectada, verificando concesionario...");
+    
+    try {
+        const existe = await Concesionario.findOne(); // Buscamos si ya hay alguno
+        
+        if (!existe) {
+            await Concesionario.create({
+                nombre: "Mi Concesionario Principal",
+                ubicacion: "Calle de la Tecnología, 1",
+                CIF: "B12345678"
+            });
+            console.log("⭐ Concesionario inicial creado!");
+        }
+    } catch (err) {
+        console.error("Error al crear concesionario inicial:", err);
+    }
+});
 
 // Middlewares
 app.use(cors());
@@ -17,8 +36,8 @@ app.use(express.json());
 
 // Rutas
 app.use('/api/coches', require('./routes/coches.routes'));
+app.use('/api/concesionarios', require('./routes/concesionario.routes'));
 app.use('/api/clientes', require('./routes/clientes.routes'));
-app.use('/api/concesionarios', require('./routes/concesionarios.routes'));
 app.use('/api/ventas', require('./routes/ventas.routes'));
 
 // Solo arranca el servidor si se ejecuta directamente (no en tests)
