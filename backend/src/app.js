@@ -13,17 +13,17 @@ const Concesionario = require('./models/Concesionario');
 // Conectar a la base de datos
 conectarDB().then(async () => {
     console.log("DB Conectada, verificando concesionario...");
-    
+
     try {
         const existe = await Concesionario.findOne(); // Buscamos si ya hay alguno
-        
+
         if (!existe) {
             await Concesionario.create({
                 nombre: "Mi Concesionario Principal",
                 ubicacion: "Calle de la Tecnología, 1",
                 CIF: "B12345678"
             });
-            console.log("⭐ Concesionario inicial creado!");
+            console.log("Concesionario inicial creado!");
         }
     } catch (err) {
         console.error("Error al crear concesionario inicial:", err);
@@ -42,8 +42,8 @@ app.use('/api/ventas', require('./routes/ventas.routes'));
 
 // Solo arranca el servidor si se ejecuta directamente (no en tests)
 if (require.main === module) {
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => console.log(`Server funcionando en puerto ${PORT}`));
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => console.log(`Server funcionando en puerto ${PORT}`));
 }
 
 module.exports = app;
